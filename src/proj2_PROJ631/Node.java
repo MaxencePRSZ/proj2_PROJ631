@@ -23,10 +23,28 @@ public class Node {
 		this.filsD = filsD;
 	}
 	
+	public int getUnicode() {
+		return unicode;
+	}
+
+	public int getFreq() {
+		return freq;
+	}
+
+	public Node getFilsG() {
+		return filsG;
+	}
+
+	public Node getFilsD() {
+		return filsD;
+	}
+
 	public char getChar(){
 		return (char)unicode;
 	}
 	
-	
+	public Node getMin(Node node){
+		return this.freq<=node.freq ? this : node; 
+	}
 	
 }
