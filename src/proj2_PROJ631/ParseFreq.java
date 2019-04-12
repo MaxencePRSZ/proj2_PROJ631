@@ -11,9 +11,9 @@ public class ParseFreq {
 	    {
 			unicodeTable[i]++;
 		}
-		for (int j = 0; j < unicodeTable.length; j++) {
-			System.out.println(j + " : " + unicodeTable[j]);
-		}
+//		for (int j = 0; j < unicodeTable.length; j++) {
+//			System.out.println(j + " : " + unicodeTable[j]);
+//		}
 		return unicodeTable;
 	}
 

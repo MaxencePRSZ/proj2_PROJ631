@@ -11,7 +11,9 @@ public class Huffman {
 		
 		int[] freqs = ParseFreq.fillFreq("data/montexte.txt");
 		ArrayList<Node> nodes = fillNodes(freqs);
-		System.out.println(findMin(nodes, nodes.get(0)).getUnicode());
+		Node root = buildTree(nodes);
+		dfSearch(root, "");
+		System.out.println(root.getFreq());
 		
 	}
 	
@@ -64,6 +66,15 @@ public class Huffman {
 		return min;
 	}
 	
-	//TODO Parcourir l'arbre 
+	private static void dfSearch(Node root, String codeBin){
+		if(root.isLeaf())
+			root.setBinCode(codeBin);
+		else{
+			dfSearch(root.getFilsG(), codeBin + "0");
+			dfSearch(root.getFilsD(), codeBin + "1");			
+		}
+		
+	}
+	 
 
 }

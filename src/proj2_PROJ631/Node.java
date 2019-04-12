@@ -3,6 +3,7 @@ package proj2_PROJ631;
 public class Node {
 	private int unicode;
 	private int freq;
+	private String binCode;
 	private Node filsG;
 	private Node filsD;
 	
@@ -19,6 +20,7 @@ public class Node {
 		super();
 		this.unicode = unicode;
 		this.freq = freq;
+		this.binCode = "-1";
 		this.filsG = filsG;
 		this.filsD = filsD;
 	}
@@ -43,8 +45,20 @@ public class Node {
 		return (char)unicode;
 	}
 	
+	public String getBinCode() {
+		return binCode;
+	}
+	
+	public void setBinCode(String codeBin) {
+		this.binCode = codeBin;
+	}
+
 	public Node getMin(Node node){
 		return this.freq<=node.freq ? this : node; 
+	}
+	
+	public boolean isLeaf(){
+		return ((this.filsG == null) && (this.filsD == null));
 	}
 	
 }
