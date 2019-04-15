@@ -8,12 +8,12 @@ public class Huffman {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		int[] freqs = ParseFreq.fillFreq("data/montexte.txt");
+		int[] freqs = ParseFreq.fillFreq("C:/Users/maxen/Documents/Polytech/proj2_PROJ631/Data/montexte.txt");
 		ArrayList<Node> nodes = fillNodes(freqs);
 		Node root = buildTree(nodes);
 		dfSearch(root, "");
-		System.out.println(root.getFreq());
+		System.out.println(ParseFreq.createBinCode(nodes));
+		
 		
 	}
 	
@@ -46,15 +46,17 @@ public class Huffman {
 	//Création de l'arbre, suppression des noeuds dans la liste, et ajout du noeud père
 	//S'il reste plus qu'1 noeud, on a notre arbre
 	private static Node buildTree(ArrayList<Node> nodes){
-		while(nodes.size() > 1){
-			Node min1 = findMin(nodes, null);
-			Node min2 = findMin(nodes, min1);
+		@SuppressWarnings("unchecked")
+		ArrayList<Node> nodes2 = (ArrayList<Node>) nodes.clone();
+		while(nodes2.size() > 1){
+			Node min1 = findMin(nodes2, null);
+			Node min2 = findMin(nodes2, min1);
 			Node sup = new Node(256, min1.getFreq()+min2.getFreq(), min1, min2); 
-			nodes.add(0, sup);
-			nodes.remove(min1);
-			nodes.remove(min2);
+			nodes2.add(0, sup);
+			nodes2.remove(min1);
+			nodes2.remove(min2);
 		}
-		return nodes.get(0); //Retourne la racine de l'arbre
+		return nodes2.get(0); //Retourne la racine de l'arbre
 	}
 	
 	private static Node findMin(ArrayList<Node> nodes, Node nodeUnwanted){
