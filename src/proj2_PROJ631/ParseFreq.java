@@ -5,34 +5,32 @@ import java.util.ArrayList;
 public class ParseFreq {
 	
 	public static String fullText = "";
+	private int[] unicodeTable = new int[255];
 	
-	private static int[] textFileToArray(String url) throws IOException{
-		FileReader file = new FileReader(url); 
-	    int i; 
-	    int[] unicodeTable = new int[255];
-	    while ((i=file.read()) != -1) 
-	    {
-			unicodeTable[i]++;
-			fullText+=(char)i;
-		}
-		for (int j = 0; j < unicodeTable.length; j++) {
-			if(unicodeTable[j] != 0)
-				System.out.println(j + " : " + unicodeTable[j]);
-		}
-	    file.close();
+	public int[] getUnicodeTable() {
 		return unicodeTable;
 	}
 
-	public static int[] fillFreq(String url){
+	public void textFileToArray(String url){
 		try {
-			return textFileToArray(url);			
+			FileReader file = new FileReader(url); 
+			int i; 
+			while ((i=file.read()) != -1) 
+			{
+				unicodeTable[i]++;
+				fullText+=(char)i;
+			}
+			for (int j = 0; j < unicodeTable.length; j++) {
+				if(unicodeTable[j] != 0)
+					System.out.println(j + " : " + unicodeTable[j]);
+			}
+			file.close();
 		} catch (Exception e) {
 			System.out.println(e);
-			return null;
 		}
 	}
 	
-	public static String createBinCode(ArrayList<Node> nodes) {
+	public String createBinCode(ArrayList<Node> nodes) {
 		String binCode = "";
 		for (int i = 0; i < fullText.length(); i++) {
 			char letter = fullText.charAt(i);
@@ -44,7 +42,7 @@ public class ParseFreq {
 		return normalizeBinCode(binCode);
 	}
 	
-	public static String normalizeBinCode(String binCode){
+	private String normalizeBinCode(String binCode){
 		int diff = 8-binCode.length()%8;
 		for (int i = 0; i < diff; i++) {
 			binCode+="0";	

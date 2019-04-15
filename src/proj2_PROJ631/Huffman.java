@@ -6,22 +6,19 @@ public class Huffman {
 	
 	private static String freqFile = "";
 	
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		int[] freqs = ParseFreq.fillFreq("C:/Users/maxen/Documents/Polytech/proj2_PROJ631/Data/montexte.txt");
-		ArrayList<Node> nodes = fillNodes(freqs);
+	public void compression(String URL) {
+		ParseFreq parseF = new ParseFreq();
+		parseF.textFileToArray("C:/Users/maxen/Documents/Polytech/proj2_PROJ631/Data/montexte.txt");
+		ArrayList<Node> nodes = fillNodes(parseF.getUnicodeTable());
 		Node root = buildTree(nodes);
 		dfSearch(root, "");
 		createFreqFile();
-		String binCode = ParseFreq.createBinCode(nodes);
+		String binCode = parseF.createBinCode(nodes);
 		System.out.println(bitToByte(binCode));
 	}
 	
 	//Insert des nodes dans un arraylist dans l'ordre : En fonction des fréquences puis de l'alphabet
-	private static ArrayList<Node> fillNodes(int[] freq){
+	private ArrayList<Node> fillNodes(int[] freq){
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		int min = 0;
 		//Parcourt le tableau de frequence et trouve le minimum dans l'ordre Ascii
@@ -35,7 +32,7 @@ public class Huffman {
 		return nodes;
 	}
 	
-	private static int getMinFromFreqs(int[] freqs){
+	private int getMinFromFreqs(int[] freqs){
 		int min = (int)Double.POSITIVE_INFINITY;
 		int res = -1;
 		for (int i = 0; i < freqs.length; i++) {
@@ -49,7 +46,7 @@ public class Huffman {
 	
 	//Création de l'arbre, suppression des noeuds dans la liste, et ajout du noeud père
 	//S'il reste plus qu'1 noeud, on a notre arbre
-	private static Node buildTree(ArrayList<Node> nodes){
+	private Node buildTree(ArrayList<Node> nodes){
 		@SuppressWarnings("unchecked")
 		ArrayList<Node> nodes2 = (ArrayList<Node>) nodes.clone();
 		while(nodes2.size() > 1){
@@ -63,7 +60,7 @@ public class Huffman {
 		return nodes2.get(0); //Retourne la racine de l'arbre
 	}
 	
-	private static Node findMin(ArrayList<Node> nodes, Node nodeUnwanted){
+	private Node findMin(ArrayList<Node> nodes, Node nodeUnwanted){
 		Node min = nodes.get(0) != nodeUnwanted ? nodes.get(0) : nodes.get(1);
 		for (Node node : nodes) {
 			if(node != nodeUnwanted)
@@ -72,7 +69,7 @@ public class Huffman {
 		return min;
 	}
 	
-	private static void dfSearch(Node root, String codeBin){
+	private void dfSearch(Node root, String codeBin){
 		if(root.isLeaf())
 			root.setBinCode(codeBin);
 		else{
@@ -81,7 +78,7 @@ public class Huffman {
 		}
 	}
 	
-	private static void createFreqFile(){
+	private void createFreqFile(){
 		try {
 			File file = new File("Data/freqFile.dat");
 			PrintWriter writer = new PrintWriter(file, "UTF-8");
@@ -92,7 +89,7 @@ public class Huffman {
 		}
 	}
 	
-	private static String bitToByte(String binCode){
+	private String bitToByte(String binCode){
 		String byteString = "", res = "";
 		for (int i = 0; i < binCode.length(); i++) {
 			byteString += binCode.charAt(i);
