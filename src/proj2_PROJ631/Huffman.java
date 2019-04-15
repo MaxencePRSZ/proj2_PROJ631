@@ -1,8 +1,11 @@
 package proj2_PROJ631;
-
+import java.io.*;
 import java.util.ArrayList;
 
 public class Huffman {
+	
+	private static String freqFile = "";
+	
 	
 	/**
 	 * @param args
@@ -12,9 +15,9 @@ public class Huffman {
 		ArrayList<Node> nodes = fillNodes(freqs);
 		Node root = buildTree(nodes);
 		dfSearch(root, "");
-		System.out.println(ParseFreq.createBinCode(nodes));
-		
-		
+		createFreqFile();
+		String binCode = ParseFreq.createBinCode(nodes);
+		System.out.println(bitToByte(binCode));
 	}
 	
 	//Insert des nodes dans un arraylist dans l'ordre : En fonction des fréquences puis de l'alphabet
@@ -26,6 +29,7 @@ public class Huffman {
 		while((min = getMinFromFreqs(freq)) != -1){
 			Node node = new Node(min, freq[min], null, null);
 			freq[min] = 0;
+			freqFile+= node.getChar() + ":" + node.getFreq() + "\n";
 			nodes.add(node);
 		}
 		return nodes;
@@ -75,8 +79,37 @@ public class Huffman {
 			dfSearch(root.getFilsG(), codeBin + "0");
 			dfSearch(root.getFilsD(), codeBin + "1");			
 		}
-		
 	}
-	 
+	
+	private static void createFreqFile(){
+		try {
+			File file = new File("Data/freqFile.dat");
+			PrintWriter writer = new PrintWriter(file, "UTF-8");
+			writer.write(freqFile);
+			writer.close();			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	private static String bitToByte(String binCode){
+		String byteString = "", res = "";
+		for (int i = 0; i < binCode.length(); i++) {
+			byteString += binCode.charAt(i);
+			if(byteString.length()==8){
+				res +=(char)Integer.parseInt(byteString, 2);
+				byteString = "";
+			}
+		}
+		try {
+			File file = new File("Data/Compressed.txt");
+			PrintWriter writer = new PrintWriter(file, "UTF-8");
+			writer.write(res);
+			writer.close();			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return res;
+	}
 
 }

@@ -37,10 +37,17 @@ public class ParseFreq {
 		for (int i = 0; i < fullText.length(); i++) {
 			char letter = fullText.charAt(i);
 			for (Node node : nodes) {
-				if(letter == node.getChar()){
+				if(letter == node.getChar())
 					binCode += node.getBinCode();
-				}
 			}
+		}
+		return normalizeBinCode(binCode);
+	}
+	
+	public static String normalizeBinCode(String binCode){
+		int diff = 8-binCode.length()%8;
+		for (int i = 0; i < diff; i++) {
+			binCode+="0";	
 		}
 		return binCode;
 	}
