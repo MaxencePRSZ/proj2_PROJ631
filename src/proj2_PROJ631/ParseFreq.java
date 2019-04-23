@@ -66,7 +66,7 @@ public class ParseFreq {
 						freq += fullText.charAt(j);
 						j++;
 					}
-					
+					unicodeTable[(int)charac] = Integer.parseInt(freq);
 				}
 			}
 			file.close();
