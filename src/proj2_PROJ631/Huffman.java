@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Huffman {
 	
-	private static String freqFile = "";
+	public static String freqFile = "";
 	
 	public void compression(String URL) {
 		ParseFreq parseF = new ParseFreq();
-		parseF.textFileToArray("./Data/alice29.txt");
+		parseF.textFileToArray(URL);
 		ArrayList<Node> nodes = fillNodes(parseF.getUnicodeTable());
 		Node root = buildTree(nodes);
 		dfSearch(root, "");
@@ -20,6 +20,7 @@ public class Huffman {
 	
 	public void decompression(String URLFreq, String URLFile){
 		ParseFreq parseF = new ParseFreq();
+		
 		
 	}
 	
@@ -33,7 +34,6 @@ public class Huffman {
 		while((min = getMinFromFreqs(freq)) != -1){
 			Node node = new Node(min, freq[min], null, null);
 			freq[min] = 0;
-			freqFile+= node.getChar() + ":" + node.getFreq() + "\n";
 			nodes.add(node);
 		}
 		return nodes;
@@ -109,7 +109,7 @@ public class Huffman {
 		}
 		try {
 			File file = new File("Data/Compressed.txt");
-			PrintWriter writer = new PrintWriter(file, "US-ASCII");
+			PrintWriter writer = new PrintWriter(file, "ISO-8859-1");
 			writer.write(res);
 			writer.close();			
 		} catch (Exception e) {
