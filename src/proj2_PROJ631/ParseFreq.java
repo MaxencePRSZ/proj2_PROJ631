@@ -49,4 +49,24 @@ public class ParseFreq {
 		}
 		return binCode;
 	}
+	
+	public void freqFileToArray(String URL){
+		try {
+			FileReader file = new FileReader(URL); 
+			int i;
+			while ((i=file.read()) != -1) 
+			{
+				
+				unicodeTable[i]++;
+				fullText+=(char)i;
+			}
+			for (int j = 0; j < unicodeTable.length; j++) {
+				if(unicodeTable[j] != 0)
+					System.out.println(j + " : " + unicodeTable[j]);
+			}
+			file.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 }

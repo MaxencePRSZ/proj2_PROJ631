@@ -8,14 +8,21 @@ public class Huffman {
 	
 	public void compression(String URL) {
 		ParseFreq parseF = new ParseFreq();
-		parseF.textFileToArray("C:/Users/maxen/Documents/Polytech/proj2_PROJ631/Data/montexte.txt");
+		parseF.textFileToArray("./Data/alice29.txt");
 		ArrayList<Node> nodes = fillNodes(parseF.getUnicodeTable());
 		Node root = buildTree(nodes);
 		dfSearch(root, "");
 		createFreqFile();
 		String binCode = parseF.createBinCode(nodes);
-		System.out.println(bitToByte(binCode));
+		bitToByte(binCode);
 	}
+	
+	
+	public void decompression(String URLFreq, String URLFile){
+		ParseFreq parseF = new ParseFreq();
+		
+	}
+	
 	
 	//Insert des nodes dans un arraylist dans l'ordre : En fonction des fréquences puis de l'alphabet
 	private ArrayList<Node> fillNodes(int[] freq){
@@ -70,8 +77,10 @@ public class Huffman {
 	}
 	
 	private void dfSearch(Node root, String codeBin){
-		if(root.isLeaf())
+		if(root.isLeaf()){
 			root.setBinCode(codeBin);
+			System.out.println(root.getChar() + " : " + codeBin);
+		}
 		else{
 			dfSearch(root.getFilsG(), codeBin + "0");
 			dfSearch(root.getFilsD(), codeBin + "1");			
@@ -100,7 +109,7 @@ public class Huffman {
 		}
 		try {
 			File file = new File("Data/Compressed.txt");
-			PrintWriter writer = new PrintWriter(file, "UTF-8");
+			PrintWriter writer = new PrintWriter(file, "US-ASCII");
 			writer.write(res);
 			writer.close();			
 		} catch (Exception e) {
