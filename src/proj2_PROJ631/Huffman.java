@@ -2,10 +2,19 @@ package proj2_PROJ631;
 import java.io.*;
 import java.util.ArrayList;
 
+
 public class Huffman {
 	
 	public static String freqFile = "";
 	
+	
+	/**
+	 * This method is meant to compress a text using huffman coding.
+	 * It's just a call to other methods in the right order, it will then create
+	 * a freqfile.dat and a compressed.txt in the Data repository 
+	 * 
+	 * @param URL The URL containing the text intended to be compressed
+	 */
 	public void compression(String URL) {
 		ParseFreq parseF = new ParseFreq();
 		parseF.textFileToArray(URL);
@@ -25,7 +34,15 @@ public class Huffman {
 	}
 	
 	
-	//Insert des nodes dans un arraylist dans l'ordre : En fonction des fréquences puis de l'alphabet
+	/**
+	 * Create an array of independent nodes containing a code from 0 to 254 and a frequency.
+	 * Order them in a specific way : find the minimum of frequencies and the minimum comparing 
+	 * ASCII code
+	 * 
+	 * @param freq An Array of the frequencies of each characters appearing in the text to compress.
+	 * 			   It's a sized 255 array
+	 * @return fillNodes an ArrayList of Nodes ordered and filled with information
+	 */
 	private ArrayList<Node> fillNodes(int[] freq){
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		int min = 0;
@@ -39,6 +56,11 @@ public class Huffman {
 		return nodes;
 	}
 	
+	/**
+	 * Get the minimum from an Array of 255 int, 0 excluded 
+	 * @param freqs Array of 255 int
+	 * @return res the minimum found
+	 */
 	private int getMinFromFreqs(int[] freqs){
 		int min = (int)Double.POSITIVE_INFINITY;
 		int res = -1;
@@ -53,6 +75,14 @@ public class Huffman {
 	
 	//Création de l'arbre, suppression des noeuds dans la liste, et ajout du noeud père
 	//S'il reste plus qu'1 noeud, on a notre arbre
+	/**
+	 * Create a tree from the ArrayList of Nodes we previously created.
+	 * Work on a clone of the ArrayList because as we advance in the algorithm
+	 * we'll remove each node of the array so we won't have duplicate.
+	 * We search for the two minimum nodes, and when found, we 
+	 * @param nodes
+	 * @return
+	 */
 	private Node buildTree(ArrayList<Node> nodes){
 		@SuppressWarnings("unchecked")
 		ArrayList<Node> nodes2 = (ArrayList<Node>) nodes.clone();
