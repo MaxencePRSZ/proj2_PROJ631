@@ -79,9 +79,11 @@ public class Huffman {
 	 * Create a tree from the ArrayList of Nodes we previously created.
 	 * Work on a clone of the ArrayList because as we advance in the algorithm
 	 * we'll remove each node of the array so we won't have duplicate.
-	 * We search for the two minimum nodes, and when found, we 
-	 * @param nodes
-	 * @return
+	 * We search for the two minimum nodes, and when found, we create the father of
+	 * them, which will have the sum of the frequencies of the 2 previous node as its
+	 * frequency, and the two others will be deleted, until only one node is left, the root
+	 * @param nodes An Arraylist of nodes
+	 * @return The root of the tree we just made
 	 */
 	private Node buildTree(ArrayList<Node> nodes){
 		@SuppressWarnings("unchecked")
@@ -97,6 +99,12 @@ public class Huffman {
 		return nodes2.get(0); //Retourne la racine de l'arbre
 	}
 	
+	/**
+	 * Find the node with the lowest frequency
+	 * @param nodes An array list of nodes
+	 * @param nodeUnwanted The node we don't want to compare to
+	 * @return the node with the lowest frequency among all the nodes
+	 */
 	private Node findMin(ArrayList<Node> nodes, Node nodeUnwanted){
 		Node min = nodes.get(0) != nodeUnwanted ? nodes.get(0) : nodes.get(1);
 		for (Node node : nodes) {
@@ -106,6 +114,12 @@ public class Huffman {
 		return min;
 	}
 	
+	/**
+	 * Depth first search through the tree to fill the binary code of the leaves of the tree
+	 * The left son will have the code 0 and the right son, 1. Recursive method.
+	 * @param root The root of the tree
+	 * @param codeBin The binary code that we will concatenate every time we call the method
+	 */
 	private void dfSearch(Node root, String codeBin){
 		if(root.isLeaf()){
 			root.setBinCode(codeBin);
