@@ -11,8 +11,9 @@ public class ParseFreq {
 		return unicodeTable;
 	}
 
-	public void textFileToArray(String url){
+	public String textFileToArray(String url){
 		try {
+			String freqFile = "";
 			FileReader file = new FileReader(url); 
 			int i; 
 			while ((i=file.read()) != -1) 
@@ -21,12 +22,16 @@ public class ParseFreq {
 				fullText+=(char)i;
 			}
 			for (int j = 0; j < unicodeTable.length; j++) {
-				if(unicodeTable[j] != 0)
+				if(unicodeTable[j] != 0){
+					freqFile += (char)j + " " + unicodeTable[j] + "\n";
 					System.out.println(j + " : " + unicodeTable[j]);
+				}
 			}
 			file.close();
+			return freqFile;
 		} catch (Exception e) {
 			System.out.println(e);
+			return null;
 		}
 	}
 	

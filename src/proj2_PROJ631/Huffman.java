@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Huffman {
 	
-	private static String freqFile = "";
+	private String freqFile = "";
 	
 	public void compression(String URL) {
 		ParseFreq parseF = new ParseFreq();
-		parseF.textFileToArray("C:/Users/maxen/Documents/Polytech/proj2_PROJ631/Data/montexte.txt");
+		freqFile = parseF.textFileToArray(URL);
 		ArrayList<Node> nodes = fillNodes(parseF.getUnicodeTable());
 		Node root = buildTree(nodes);
 		dfSearch(root, "");
 		createFreqFile();
 		String binCode = parseF.createBinCode(nodes);
-		System.out.println(bitToByte(binCode));
+		bitToByte(binCode);
 	}
 	
 	//Insert des nodes dans un arraylist dans l'ordre : En fonction des fréquences puis de l'alphabet
@@ -26,7 +26,6 @@ public class Huffman {
 		while((min = getMinFromFreqs(freq)) != -1){
 			Node node = new Node(min, freq[min], null, null);
 			freq[min] = 0;
-			freqFile+= node.getChar() + ":" + node.getFreq() + "\n";
 			nodes.add(node);
 		}
 		return nodes;
@@ -89,7 +88,7 @@ public class Huffman {
 		}
 	}
 	
-	private String bitToByte(String binCode){
+	private void bitToByte(String binCode){
 		String byteString = "", res = "";
 		for (int i = 0; i < binCode.length(); i++) {
 			byteString += binCode.charAt(i);
@@ -106,7 +105,7 @@ public class Huffman {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		return res;
+		System.out.println(res);
 	}
 
 }
