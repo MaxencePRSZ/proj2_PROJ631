@@ -4,7 +4,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Huffman huffComp = new Huffman();
-		huffComp.compression("./Data/alice29.txt");
+		huffComp.compression("./Data/extrait_alice.txt");
 	}
 
 }

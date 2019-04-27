@@ -24,11 +24,13 @@ public class Huffman {
 		createFreqFile();
 		String binCode = parseF.createBinCode(nodes);
 		bitToByte(binCode);
+		decompression(URL, URL);
 	}
 	
 	
 	public void decompression(String URLFreq, String URLFile){
 		ParseFreq parseF = new ParseFreq();
+		parseF.freqFileToArray("Data/freqFile.dat");
 		
 		
 	}
@@ -123,7 +125,7 @@ public class Huffman {
 	private void dfSearch(Node root, String codeBin){
 		if(root.isLeaf()){
 			root.setBinCode(codeBin);
-			System.out.println(root.getChar() + " : " + codeBin);
+//			System.out.println(root.getChar() + " : " + codeBin);
 		}
 		else{
 			dfSearch(root.getFilsG(), codeBin + "0");
@@ -131,10 +133,14 @@ public class Huffman {
 		}
 	}
 	
+	/**
+	 * Create a file from the freqFile filled with the frequencies of each 
+	 * characters
+	 */
 	private void createFreqFile(){
 		try {
 			File file = new File("Data/freqFile.dat");
-			PrintWriter writer = new PrintWriter(file, "UTF-8");
+			PrintWriter writer = new PrintWriter(file, "ISO-8859-1");
 			writer.write(freqFile);
 			writer.close();			
 		} catch (Exception e) {
@@ -142,6 +148,11 @@ public class Huffman {
 		}
 	}
 	
+	/**
+	 * Create a string of characters for each byte on the binary chain passed in parameter
+	 * And put this bytes chain into a file named compressed.txt
+	 * @param binCode A chain of 0 and 1
+	 */
 	private void bitToByte(String binCode){
 		String byteString = "", res = "";
 		for (int i = 0; i < binCode.length(); i++) {
@@ -159,7 +170,7 @@ public class Huffman {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		System.out.println(res);
+//		System.out.println(res);
 	}
 
 }
