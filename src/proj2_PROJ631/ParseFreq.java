@@ -22,10 +22,8 @@ public class ParseFreq {
 				fullText+=(char)i;
 			}
 			for (int j = 0; j < unicodeTable.length; j++) {
-				if(unicodeTable[j] != 0){
-					freqFile += (char)j + " " + unicodeTable[j] + "\n";
-					System.out.println(j + " : " + unicodeTable[j]);
-				}
+				if(unicodeTable[j] != 0)
+					Huffman.freqFile+= (char)j + " " + unicodeTable[j] + "\n";
 			}
 			file.close();
 			return freqFile;
@@ -53,5 +51,30 @@ public class ParseFreq {
 			binCode+="0";	
 		}
 		return binCode;
+	}
+	
+	public void freqFileToArray(String URL){
+		try {
+			FileReader file = new FileReader(URL); 
+			int i;
+			while ((i=file.read()) != -1) 
+			{
+				fullText += i;
+			}
+			for (int j = 0; j < fullText.length(); j++) {
+				if(fullText.charAt(j) == ' '){
+					char charac = fullText.charAt(j-1);
+					String freq = "";
+					while(fullText.charAt(j) != '\n'){
+						freq += fullText.charAt(j);
+						j++;
+					}
+					unicodeTable[(int)charac] = Integer.parseInt(freq);
+				}
+			}
+			file.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }

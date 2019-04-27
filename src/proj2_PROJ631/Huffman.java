@@ -2,13 +2,22 @@ package proj2_PROJ631;
 import java.io.*;
 import java.util.ArrayList;
 
+
 public class Huffman {
 	
-	private String freqFile = "";
+	public static String freqFile = "";
 	
+	
+	/**
+	 * This method is meant to compress a text using huffman coding.
+	 * It's just a call to other methods in the right order, it will then create
+	 * a freqfile.dat and a compressed.txt in the Data repository 
+	 * 
+	 * @param URL The URL containing the text intended to be compressed
+	 */
 	public void compression(String URL) {
 		ParseFreq parseF = new ParseFreq();
-		freqFile = parseF.textFileToArray(URL);
+		parseF.textFileToArray(URL);
 		ArrayList<Node> nodes = fillNodes(parseF.getUnicodeTable());
 		Node root = buildTree(nodes);
 		dfSearch(root, "");
@@ -17,7 +26,23 @@ public class Huffman {
 		bitToByte(binCode);
 	}
 	
-	//Insert des nodes dans un arraylist dans l'ordre : En fonction des fréquences puis de l'alphabet
+	
+	public void decompression(String URLFreq, String URLFile){
+		ParseFreq parseF = new ParseFreq();
+		
+		
+	}
+	
+	
+	/**
+	 * Create an array of independent nodes containing a code from 0 to 254 and a frequency.
+	 * Order them in a specific way : find the minimum of frequencies and the minimum comparing 
+	 * ASCII code
+	 * 
+	 * @param freq An Array of the frequencies of each characters appearing in the text to compress.
+	 * 			   It's a sized 255 array
+	 * @return fillNodes an ArrayList of Nodes ordered and filled with information
+	 */
 	private ArrayList<Node> fillNodes(int[] freq){
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		int min = 0;
@@ -31,6 +56,11 @@ public class Huffman {
 		return nodes;
 	}
 	
+	/**
+	 * Get the minimum from an Array of 255 int, 0 excluded 
+	 * @param freqs Array of 255 int
+	 * @return res the minimum found
+	 */
 	private int getMinFromFreqs(int[] freqs){
 		int min = (int)Double.POSITIVE_INFINITY;
 		int res = -1;
@@ -45,6 +75,16 @@ public class Huffman {
 	
 	//Création de l'arbre, suppression des noeuds dans la liste, et ajout du noeud père
 	//S'il reste plus qu'1 noeud, on a notre arbre
+	/**
+	 * Create a tree from the ArrayList of Nodes we previously created.
+	 * Work on a clone of the ArrayList because as we advance in the algorithm
+	 * we'll remove each node of the array so we won't have duplicate.
+	 * We search for the two minimum nodes, and when found, we create the father of
+	 * them, which will have the sum of the frequencies of the 2 previous node as its
+	 * frequency, and the two others will be deleted, until only one node is left, the root
+	 * @param nodes An Arraylist of nodes
+	 * @return The root of the tree we just made
+	 */
 	private Node buildTree(ArrayList<Node> nodes){
 		@SuppressWarnings("unchecked")
 		ArrayList<Node> nodes2 = (ArrayList<Node>) nodes.clone();
@@ -59,6 +99,12 @@ public class Huffman {
 		return nodes2.get(0); //Retourne la racine de l'arbre
 	}
 	
+	/**
+	 * Find the node with the lowest frequency
+	 * @param nodes An array list of nodes
+	 * @param nodeUnwanted The node we don't want to compare to
+	 * @return the node with the lowest frequency among all the nodes
+	 */
 	private Node findMin(ArrayList<Node> nodes, Node nodeUnwanted){
 		Node min = nodes.get(0) != nodeUnwanted ? nodes.get(0) : nodes.get(1);
 		for (Node node : nodes) {
@@ -68,9 +114,17 @@ public class Huffman {
 		return min;
 	}
 	
+	/**
+	 * Depth first search through the tree to fill the binary code of the leaves of the tree
+	 * The left son will have the code 0 and the right son, 1. Recursive method.
+	 * @param root The root of the tree
+	 * @param codeBin The binary code that we will concatenate every time we call the method
+	 */
 	private void dfSearch(Node root, String codeBin){
-		if(root.isLeaf())
+		if(root.isLeaf()){
 			root.setBinCode(codeBin);
+			System.out.println(root.getChar() + " : " + codeBin);
+		}
 		else{
 			dfSearch(root.getFilsG(), codeBin + "0");
 			dfSearch(root.getFilsD(), codeBin + "1");			
@@ -99,7 +153,7 @@ public class Huffman {
 		}
 		try {
 			File file = new File("Data/Compressed.txt");
-			PrintWriter writer = new PrintWriter(file, "UTF-8");
+			PrintWriter writer = new PrintWriter(file, "ISO-8859-1");
 			writer.write(res);
 			writer.close();			
 		} catch (Exception e) {
