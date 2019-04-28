@@ -41,6 +41,10 @@ public class Node {
 		return filsD;
 	}
 
+	/**
+	 * Transform the characters code to the characters itself
+	 * @return The character as a char
+	 */
 	public char getChar(){
 		return (char)unicode;
 	}
@@ -53,10 +57,20 @@ public class Node {
 		this.binCode = codeBin;
 	}
 
+	/**
+	 * Compare two nodes ans return the one with the lowest frequency
+	 * @param node The node to compare (Node)
+	 * @return The lowest frequency node (Node)
+	 */
 	public Node getMin(Node node){
 		return this.freq<=node.freq ? this : node; 
 	}
 	
+	/**
+	 * Test if the node is leaf, that means if the node has no
+	 * right son or left son
+	 * @return A boolean, true if leaf, false otherwise
+	 */
 	public boolean isLeaf(){
 		return ((this.filsG == null) && (this.filsD == null));
 	}
