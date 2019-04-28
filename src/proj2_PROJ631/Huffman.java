@@ -24,15 +24,25 @@ public class Huffman {
 		createFreqFile();
 		String binCode = parseF.createBinCode(nodes);
 		bitToByte(binCode);
-		decompression(URL, URL);
 	}
 	
 	
+	/**
+	 * Decode huffman text from a frequencies file and a compressed text
+	 * @param URLFreq string URL of the frequencies file
+	 * @param URLFile string URL of the compressed text
+	 */
 	public void decompression(String URLFreq, String URLFile){
 		ParseFreq parseF = new ParseFreq();
-		parseF.freqFileToArray("Data/freqFile.dat");
-		
-		
+		parseF.freqFileToArray(URLFreq);
+		String binCode = parseF.compressedToBinCode(URLFile);
+		ArrayList<Node> nodes = fillNodes(parseF.getUnicodeTable());
+		Node root = buildTree(nodes);
+		dfSearch(root, "");
+		for (Node node : nodes) {
+			System.out.println("Lettre : " + node.getChar() + " - Code : " + node.getBinCode() + " Freq : " + node.getFreq());
+		}
+		reBuildText(nodes, binCode);
 	}
 	
 	
@@ -159,6 +169,7 @@ public class Huffman {
 			byteString += binCode.charAt(i);
 			if(byteString.length()==8){
 				res +=(char)Integer.parseInt(byteString, 2);
+//				System.out.println("ICI : "+Integer.parseInt(byteString, 2) + " " + (char)Integer.parseInt(byteString, 2));
 				byteString = "";
 			}
 		}
@@ -171,6 +182,66 @@ public class Huffman {
 			System.out.println(e);
 		}
 //		System.out.println(res);
+	}
+	
+	
+	/**
+	 * rebuild the text from the binary code and the nodes. While the binary chain isn't
+	 * empty, we iterate through every characters and test if their binary code fits with
+	 * the beginning of the full binary code. If so, we remove the character binary chain
+	 * from the full binary chain and we add the character itself to a variable that will
+	 * be the full text. Also, since we're removing useless 0s at the end of the text.
+	 * Create a file with the full decoded text at Data/Decompressed.txt
+	 * @param nodes An arrayList of nodes containing characters and their binary code
+	 * @param binCode The binary code of the entire compressed text
+	 */
+	private void reBuildText(ArrayList<Node> nodes, String binCode){
+		String fullText = "";
+		Node mostFrequent = getMostFrequentChar(nodes);
+		int freqCount = 0;
+		while(binCode.length() > 0){
+			for (Node node : nodes) {
+				int size = node.getBinCode().length();
+				if(size>binCode.length())
+					continue;				
+				String reducedBinCode = binCode.substring(0, size);
+				if(node.getBinCode().equals(reducedBinCode)){
+					if(node == mostFrequent){
+						if(freqCount == mostFrequent.getFreq()){
+							binCode = "";
+							break;
+						}
+						freqCount++;
+					}
+					fullText += node.getChar();
+					binCode = binCode.substring(size);
+					break;
+				}
+			}	
+		}
+		try {
+			File file = new File("Data/Decompressed.txt");
+			PrintWriter writer = new PrintWriter(file, "ISO-8859-1");
+			writer.write(fullText);
+			writer.close();			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+
+	/**
+	 * Find the most frequent characters among the nodes
+	 * @param nodes An array of every nodes
+	 * @return The most frequent node
+	 */
+	private Node getMostFrequentChar(ArrayList<Node> nodes) {
+		Node mostFreq = nodes.get(0);
+		for (Node node : nodes) {
+			if(node.getFreq() > mostFreq.getFreq())
+				mostFreq = node;
+		}
+		return mostFreq;
 	}
 
 }
