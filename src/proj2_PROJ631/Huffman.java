@@ -186,7 +186,7 @@ public class Huffman {
 	
 	
 	/**
-	 * rebuild the text from the binary code and the nodes. While the binary chain isn't
+	 * Rebuild the text from the binary code and the nodes. While the binary chain isn't
 	 * empty, we iterate through every characters and test if their binary code fits with
 	 * the beginning of the full binary code. If so, we remove the character binary chain
 	 * from the full binary chain and we add the character itself to a variable that will
